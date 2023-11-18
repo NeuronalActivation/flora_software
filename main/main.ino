@@ -6,16 +6,31 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(1, PIN, NEO_GRB + NEO_KHZ800);
 
 void setup() {
   strip.begin();
-  strip.setBrightness(3);
+  strip.setBrightness(5);
   strip.show(); // Initialize all pixels to 'off'
 }
 
 void loop() {
-  // Some example procedures showing how to display to the pixels:
-  colorWipe(strip.Color(255, 0, 0), 500); // Red
-  colorWipe(strip.Color(0, 255, 0), 500); // Green
-  colorWipe(strip.Color(0, 0, 255), 500); // Blue
-  rainbowCycle(20);
+  // Only check for input if serial is working
+  if (Serial.available()) {
+    // Process input when there's input available
+    String val = ".";
+    if (Serial.available() > 0) {
+      val = Serial.readString();
+      Serial.println("Input: " + val);
+      if (val == "red\n") {
+        Serial.println("LED: " + val);
+        colorWipe(strip.Color(255, 0, 0), 1000); // Red
+      } else if (val == "green\n") {
+        Serial.println("LED: " + val);
+        colorWipe(strip.Color(0, 255, 0), 1000); // Green
+      } else if (val == "blue\n") {
+        Serial.println("LED: " + val);
+        colorWipe(strip.Color(0, 0, 255), 1000); // Blue
+      }
+      // colorWipe(strip.Color(0, 0, 0), 1000); // Off
+    }
+  }
 }
 
 // Fill the dots one after the other with a color
